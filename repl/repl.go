@@ -2,7 +2,6 @@ package repl
 
 import (
 	"bufio"
-	"fmt"
 	"io"
 	"monkey/evaluator"
 	"monkey/lexer"
