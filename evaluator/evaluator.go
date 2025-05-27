@@ -20,9 +20,10 @@ var (
 
 // Eval is the heart of the Monkey interpreter. It recursively traverses an AST node
 // and evaluates it within a given environment, producing a Monkey object.
-// - node: The ast.Node to evaluate. This can be any type of statement or expression.
-// - env: The *object.Environment in which the evaluation occurs. This environment
-//        holds variable bindings and provides context for lexical scoping.
+//   - node: The ast.Node to evaluate. This can be any type of statement or expression.
+//   - env: The *object.Environment in which the evaluation occurs. This environment
+//     holds variable bindings and provides context for lexical scoping.
+//
 // Returns an object.Object representing the result of the evaluation.
 func Eval(node ast.Node, env *object.Environment) object.Object {
 	// The main switch statement dispatches based on the concrete type of the ast.Node.
@@ -411,15 +412,15 @@ func evalIdentifier(
 		return builtin // Return the built-in function object.
 	}
 	// If not found anywhere, it's an error.
-	return newError("identifier not found: " + node.Value)
+	return newError("%s", "identifier not found: "+node.Value)
 }
 
 // isTruthy determines the truthiness of a Monkey object.
-// - `NULL` is falsy.
-// - `FALSE` (the boolean object) is falsy.
-// - `TRUE` (the boolean object) is truthy.
-// - All other objects (integers including 0, strings including "", functions, arrays, hashes)
-//   are considered truthy in Monkey's current definition.
+//   - `NULL` is falsy.
+//   - `FALSE` (the boolean object) is falsy.
+//   - `TRUE` (the boolean object) is truthy.
+//   - All other objects (integers including 0, strings including "", functions, arrays, hashes)
+//     are considered truthy in Monkey's current definition.
 func isTruthy(obj object.Object) bool {
 	switch obj {
 	case NULL:
@@ -505,9 +506,10 @@ func applyFunction(fn object.Object, args []object.Object) object.Object {
 
 // extendFunctionEnv creates a new, enclosed environment specifically for a function call.
 // This new environment is where the function's parameters will be bound to the argument values.
-// - `fn`: The `object.Function` being called. Its `Env` field (the environment where it was defined)
-//         will become the outer environment for this new scope.
-// - `args`: The slice of evaluated argument objects passed to the function.
+//   - `fn`: The `object.Function` being called. Its `Env` field (the environment where it was defined)
+//     will become the outer environment for this new scope.
+//   - `args`: The slice of evaluated argument objects passed to the function.
+//
 // The function's parameters (from `fn.Parameters`) are bound to the corresponding `args`
 // in the new environment's local store.
 func extendFunctionEnv(
@@ -575,12 +577,12 @@ func evalArrayIndexExpression(array, index object.Object) object.Object {
 
 // evalHashLiteral evaluates an AST HashLiteral node to create an `object.Hash`.
 // It iterates through the key-value pairs in the AST:
-// 1. Evaluates the AST key expression.
-// 2. Checks if the evaluated key is `Hashable`. If not, returns an error.
-// 3. Evaluates the AST value expression.
-// 4. If any evaluation causes an error, it's propagated.
-// 5. Stores the evaluated key (via its `HashKey()`) and the evaluated value as an `object.HashPair`
-//    in the `object.Hash`'s internal map.
+//  1. Evaluates the AST key expression.
+//  2. Checks if the evaluated key is `Hashable`. If not, returns an error.
+//  3. Evaluates the AST value expression.
+//  4. If any evaluation causes an error, it's propagated.
+//  5. Stores the evaluated key (via its `HashKey()`) and the evaluated value as an `object.HashPair`
+//     in the `object.Hash`'s internal map.
 func evalHashLiteral(
 	node *ast.HashLiteral,
 	env *object.Environment,
@@ -605,7 +607,7 @@ func evalHashLiteral(
 			return value
 		}
 
-		hashed := hashKey.HashKey()             // Get the HashKey from the hashable key object.
+		hashed := hashKey.HashKey()                             // Get the HashKey from the hashable key object.
 		pairs[hashed] = object.HashPair{Key: key, Value: value} // Store the pair.
 	}
 
